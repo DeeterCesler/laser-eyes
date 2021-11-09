@@ -10,11 +10,68 @@
     <title>Deeter Cesler is your favorite person</title>
 </head>
 <body>
+    <div id="app"></div>
     <img class="laser" src="./lazer.png" id="one"></div>
     <img class="laser" src="./lazer.png" id="two"></div>
+    <br/>
+    <br/>
+    <form>
+        <input type="file" name="upload"/>
+    </form>
+    <br/>
+    <br/>
     <div class="hero-wrapper">
-        <div class="header-image"></div>
     </div>
-    <script type="text/javascript" src="./main.js"></script>
+    <script>
+        const state = {
+            uploadedImage: null
+        }
+
+        var form = document.querySelector('form');
+        form.addEventListener('change', function(e) {
+            state.uploadedImage = URL.createObjectURL(event.target.files[0])
+
+            document.getElementById("app").innerHTML = "<img id='uploaded' />"
+            document.getElementById("uploaded").src = state.uploadedImage
+        
+        if(document.getElementById("uploaded")){
+            var xPosition;
+            var yPosition;
+            var laser1 = document.getElementById('one')
+            var laser2 = document.getElementById('two')
+            let eye = "left"
+
+            document.addEventListener("click", getClickPosition, false);
+
+            function toggleEye() {
+                if (eye === "left") eye = "right"
+                else eye = "left"
+            }
+
+            const placeLaser = (toggledEye) => {
+                if (toggledEye === "left") {
+                    laser1.style.left = xPosition + "px"
+                    laser1.style.top = yPosition + "px"
+                } else {
+                    laser2.style.left = xPosition + "px"
+                    laser2.style.top = yPosition + "px"
+                }
+            }
+
+            function getClickPosition(e) {
+                xPosition = e.clientX - 90;
+                yPosition = e.clientY - 480;
+
+                placeLaser(eye)
+                toggleEye();
+            }
+        }
+    });
+
+    </script>
+    <script >
+        MediaDevices.getUserMedia();
+        console.log('me so hor–i mean, screenshotty')
+    </script>
 </body>
 </html>
