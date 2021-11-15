@@ -10,68 +10,118 @@
     <title>Deeter Cesler is your favorite person</title>
 </head>
 <body>
-    <div id="app"></div>
-    <img class="laser" src="./lazer.png" id="one"></div>
-    <img class="laser" src="./lazer.png" id="two"></div>
-    <br/>
-    <br/>
-    <form>
-        <input type="file" name="upload"/>
-    </form>
-    <br/>
-    <br/>
-    <div class="hero-wrapper">
-    </div>
-    <script>
-        const state = {
-            uploadedImage: null
-        }
-
-        var form = document.querySelector('form');
-        form.addEventListener('change', function(e) {
-            state.uploadedImage = URL.createObjectURL(event.target.files[0])
-
-            document.getElementById("app").innerHTML = "<img id='uploaded' />"
-            document.getElementById("uploaded").src = state.uploadedImage
-        
-        if(document.getElementById("uploaded")){
-            var xPosition;
-            var yPosition;
-            var laser1 = document.getElementById('one')
-            var laser2 = document.getElementById('two')
-            let eye = "left"
-
-            document.addEventListener("click", getClickPosition, false);
-
-            function toggleEye() {
-                if (eye === "left") eye = "right"
-                else eye = "left"
+    <div id="sloppy-wrapper">
+        <div id="app"></div>
+        <img class="laser" src="./lazer.png" id="one"></div>
+        <img class="laser" src="./lazer.png" id="two"></div>
+        <br/>
+        <br/>
+        <form>
+            <input type="file" name="upload"/>
+        </form>
+        <br/>
+        <br/>
+        <div class="hero-wrapper">
+        </div>
+        <script>
+            const state = {
+                uploadedImage: null
             }
 
-            const placeLaser = (toggledEye) => {
-                if (toggledEye === "left") {
-                    laser1.style.left = xPosition + "px"
-                    laser1.style.top = yPosition + "px"
-                } else {
-                    laser2.style.left = xPosition + "px"
-                    laser2.style.top = yPosition + "px"
+            var form = document.querySelector('form');
+            form.addEventListener('change', function(e) {
+                state.uploadedImage = URL.createObjectURL(event.target.files[0])
+
+                document.getElementById("app").innerHTML = "<img id='uploaded' />"
+                document.getElementById("uploaded").src = state.uploadedImage
+            
+                if(document.getElementById("uploaded")){
+                    var xPosition;
+                    var yPosition;
+                    var laser1 = document.getElementById('one')
+                    var laser2 = document.getElementById('two')
+                    let eye = "left"
+
+                    document.addEventListener("click", getClickPosition, false);
+
+                    function toggleEye() {
+                        if (eye === "left") eye = "right"
+                        else eye = "left"
+                    }
+
+                    const placeLaser = (toggledEye) => {
+                        if (toggledEye === "left") {
+                            laser1.style.left = xPosition + "px"
+                            laser1.style.top = yPosition + "px"
+                        } else {
+                            laser2.style.left = xPosition + "px"
+                            laser2.style.top = yPosition + "px"
+                        }
+                    }
+
+                    function getClickPosition(e) {
+                        xPosition = e.clientX - 90;
+                        yPosition = e.clientY - 480;
+
+                        placeLaser(eye)
+                        toggleEye();
+                    }
                 }
-            }
+            });
 
-            function getClickPosition(e) {
-                xPosition = e.clientX - 90;
-                yPosition = e.clientY - 480;
+        </script>
 
-                placeLaser(eye)
-                toggleEye();
-            }
-        }
+    <div id="previewImage"></div>
+    <script>
+        function getScreenshotOfElement(element, posX, posY, width, height, callback) {
+    html2canvas(element, {
+        onrendered: function (canvas) {
+            var context = canvas.getContext('2d');
+            var imageData = context.getImageData(posX, posY, width, height).data;
+            var outputCanvas = document.createElement('canvas');
+            var outputContext = outputCanvas.getContext('2d');
+            outputCanvas.width = width;
+            outputCanvas.height = height;
+
+            var idata = outputContext.createImageData(width, height);
+            idata.data.set(imageData);
+            outputContext.putImageData(idata, 0, 0);
+            callback(outputCanvas.toDataURL().replace("data:image/png;base64,", ""));
+        },
+        width: width,
+        height: height,
+        useCORS: true,
+        taintTest: false,
+        allowTaint: false
     });
+}
 
     </script>
-    <script >
-        MediaDevices.getUserMedia();
-        console.log('me so hor–i mean, screenshotty')
+        
+    <script>
+    function getScreenshotOfElement(element, posX, posY, width, height, callback) {
+    html2canvas(element, {
+        onrendered: function (canvas) {
+            var context = canvas.getContext('2d');
+            var imageData = context.getImageData(posX, posY, width, height).data;
+            var outputCanvas = document.createElement('canvas');
+            var outputContext = outputCanvas.getContext('2d');
+            outputCanvas.width = width;
+            outputCanvas.height = height;
+
+            var idata = outputContext.createImageData(width, height);
+            idata.data.set(imageData);
+            outputContext.putImageData(idata, 0, 0);
+            callback(outputCanvas.toDataURL().replace("data:image/png;base64,", ""));
+        },
+        width: width,
+        height: height,
+        useCORS: true,
+        taintTest: false,
+        allowTaint: false
+    });
+}
     </script>
+    </div>
 </body>
 </html>
